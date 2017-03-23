@@ -1,0 +1,15 @@
+/.classpath
+/.project
+/target
+.idea
+*.iml
+*.class
+/*/target
+/disconf
+/*/disconf
+
+.settings/
+.externalToolBuilders/
+
+.classpath
+.project
