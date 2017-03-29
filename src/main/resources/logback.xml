@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- application.properties 里的优先级更高？ -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="com.github.hesimin" level="DEBUG"/>
+</configuration>
