@@ -2,6 +2,7 @@ package com.github.hesimin.springboot;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -31,7 +32,8 @@ import java.io.IOException;
  * @author hesimin 2017-03-23
  */
 @SpringBootApplication
-//@ServletComponentScan //Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。
+@ServletComponentScan //Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。
+@MapperScan("com.github.hesimin.springboot.mapper")// mybatis mapper
 public class SpringBootApp {
 
     public static void main(String[] args) {
