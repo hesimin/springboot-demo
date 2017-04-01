@@ -73,6 +73,6 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
             public void afterCompletion(WebRequest webRequest, Exception e) throws Exception {
 
             }
-        }).addPathPatterns("/**");;
+        }).addPathPatterns("/**");
     }
 }
