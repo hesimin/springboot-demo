@@ -1,5 +1,7 @@
 package com.github.hesimin.springboot.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
@@ -20,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Configuration
 public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
+
+    private static final Logger logger = LoggerFactory.getLogger(MyWebAppConfigurer.class);
 
     /**
      * 自定义静态资源映射目录（可在配置文件中配置）
@@ -43,18 +47,18 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
         registry.addInterceptor(new HandlerInterceptor() {
             @Override
             public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-                System.out.println("========= 自定义拦截器：(Controller方法调用之前） =========");
+                logger.info("========= 自定义拦截器：(Controller方法调用之前） =========");
                 return true;
             }
 
             @Override
             public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-                System.out.println("========= 自定义拦截器：Controller方法调用之后，但是在视图被渲染之前 =========");
+                logger.info("========= 自定义拦截器：Controller方法调用之后，但是在视图被渲染之前 =========");
             }
 
             @Override
             public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-                System.out.println("========= 自定义拦截器：请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作） =========");
+                logger.info("========= 自定义拦截器：请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作） =========");
             }
         }).addPathPatterns("/**");
 

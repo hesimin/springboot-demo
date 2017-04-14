@@ -1,8 +1,11 @@
 package com.github.hesimin.springboot;
 
+import com.github.hesimin.springboot.config.MyWebAppConfigurer;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -36,6 +39,8 @@ import java.io.IOException;
 @MapperScan("com.github.hesimin.springboot.mapper")// mybatis mapper
 public class SpringBootApp {
 
+    private static final Logger logger = LoggerFactory.getLogger(SpringBootApp.class);
+
     public static void main(String[] args) {
         SpringApplication.run(SpringBootApp.class, args);
     }
@@ -48,16 +53,16 @@ public class SpringBootApp {
      */
     @Bean
     public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
-        System.out.println("========== 配置内置tomcat ==========");
+        logger.info("========== 配置内置tomcat ==========");
         TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
 //        tomcatFactory.setPort(8081);
         tomcatFactory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
             Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();
             //设置最大连接数
-            protocol.setMaxConnections(200);
+            protocol.setMaxConnections(500);
             //设置最大线程数
-            protocol.setMaxThreads(500);
-            protocol.setConnectionTimeout(5000);
+            protocol.setMaxThreads(800);
+            protocol.setConnectionTimeout(8000);
         });
         return tomcatFactory;
     }
@@ -73,13 +78,13 @@ public class SpringBootApp {
         return new ServletRegistrationBean(new HttpServlet() {
             @Override
             protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-                System.out.println("========== doGet() ==========");
+                logger.info("========== doGet() ==========");
                 doPost(req, resp);
             }
 
             @Override
             protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-                System.out.println("========== doPost() ==========");
+                logger.info("========== doPost() ==========");
                 resp.getWriter().print("this servlet.");
             }
         }, "/servlet/test");
@@ -90,12 +95,12 @@ public class SpringBootApp {
         return new ServletListenerRegistrationBean<>(new ServletContextListener() {
             @Override
             public void contextInitialized(ServletContextEvent servletContextEvent) {
-                System.out.println("-->ServletContext初始化:" + servletContextEvent.getServletContext().getServerInfo());
+                logger.info("-->ServletContext初始化:" + servletContextEvent.getServletContext().getServerInfo());
             }
 
             @Override
             public void contextDestroyed(ServletContextEvent servletContextEvent) {
-                System.out.println("-->ServletContext销毁");
+                logger.info("-->ServletContext销毁");
             }
         });
     }
