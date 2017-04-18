@@ -8,13 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.Servlet;
@@ -118,4 +122,23 @@ public class SpringBootApp {
 //        registration.addUrlMappings("*.json");
 //        return registration;
 //    }
+
+    /**
+     * 配置错误页面
+     */
+    @Bean
+    public EmbeddedServletContainerCustomizer containerCustomizer() {
+
+        return new EmbeddedServletContainerCustomizer() {
+            @Override
+            public void customize(ConfigurableEmbeddedServletContainer container) {
+                System.out.println("config error page.");
+                ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/error.html");
+                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
+                ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
+
+                container.addErrorPages(error401Page, error404Page, error500Page);
+            }
+        };
+    }
 }
