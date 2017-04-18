@@ -34,7 +34,7 @@ import java.io.IOException;
  * <p>静态资源默认配置：目录，优先级顺序为：META/resources > resources > static > public </p>
  * @author hesimin 2017-03-23
  */
-@SpringBootApplication
+@SpringBootApplication // 本类不能放在包外（这里如放到和包com同级），否则会出错。本类所在的包会被作为scan的默认根路径
 @ServletComponentScan //Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。
 @MapperScan("com.github.hesimin.springboot.mapper")// mybatis mapper
 public class SpringBootApp {
